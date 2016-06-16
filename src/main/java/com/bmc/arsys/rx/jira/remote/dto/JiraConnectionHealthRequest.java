@@ -5,6 +5,5 @@ import java.util.List;
 
 public class JiraConnectionHealthRequest {
 
-    public List<JiraConnectionHealthRequestPart> connectionInstances = new ArrayList<>();
-
+    public List<JiraConnectionHealthRequestPart> connectionInstances = new ArrayList<JiraConnectionHealthRequestPart>();
 }

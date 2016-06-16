@@ -6,9 +6,9 @@ import javax.ws.rs.ext.ExceptionMapper;
 
 import com.bmc.arsys.rx.remote.dto.ErrorResponse;
 
-
 public class ApplicationExceptionHandler implements ExceptionMapper<Exception> {
 
+    @Override
     public Response toResponse(Exception exception) {
         if (exception instanceof WebApplicationException) {
             WebApplicationException e = (WebApplicationException) exception;

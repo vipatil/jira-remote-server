@@ -1,17 +1,16 @@
 package com.bmc.arsys.rx.jira.remote.services;
 
-import com.atlassian.jira.rest.client.api.JiraRestClient;
-
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
+
+import com.atlassian.jira.rest.client.api.JiraRestClient;
 
 public class ConnectionHealthService {
 
     private final JiraConnectorRestClientFactory clientFactory;
 
-
     public ConnectionHealthService() {
-        this.clientFactory = JiraConnectorRestClientFactory.instance();
+        clientFactory = JiraConnectorRestClientFactory.instance();
     }
 
     public void assessHealth(JiraConnection connection) throws IOException {

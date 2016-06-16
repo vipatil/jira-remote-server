@@ -1,24 +1,36 @@
 package com.bmc.arsys.rx.jira.remote.services;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.ExecutionException;
+
+import javax.ws.rs.BadRequestException;
+import javax.ws.rs.InternalServerErrorException;
+
 import com.atlassian.jira.rest.client.api.GetCreateIssueMetadataOptionsBuilder;
 import com.atlassian.jira.rest.client.api.JiraRestClient;
-import com.atlassian.jira.rest.client.api.RestClientException;
-import com.atlassian.jira.rest.client.api.domain.*;
+import com.atlassian.jira.rest.client.api.domain.BasicIssue;
+import com.atlassian.jira.rest.client.api.domain.BasicUser;
+import com.atlassian.jira.rest.client.api.domain.CimFieldInfo;
+import com.atlassian.jira.rest.client.api.domain.CimIssueType;
+import com.atlassian.jira.rest.client.api.domain.CimProject;
+import com.atlassian.jira.rest.client.api.domain.CustomFieldOption;
+import com.atlassian.jira.rest.client.api.domain.EntityHelper;
+import com.atlassian.jira.rest.client.api.domain.IssueFieldId;
+import com.atlassian.jira.rest.client.api.domain.Version;
 import com.atlassian.jira.rest.client.api.domain.input.IssueInputBuilder;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
-import javax.ws.rs.BadRequestException;
-import javax.ws.rs.InternalServerErrorException;
-import javax.ws.rs.WebApplicationException;
-import java.io.IOException;
-import java.util.*;
-import java.util.concurrent.ExecutionException;
-
 public class JiraService {
 
     private final JiraConnectorRestClientFactory clientFactory;
-
 
     public JiraService(JiraConnectorRestClientFactory clientFactory) {
         this.clientFactory = clientFactory;
@@ -45,23 +57,17 @@ public class JiraService {
         }
     }
 
-    public BasicIssue createIssue(
-            JiraConnection connection,
-            String projectKey,
-            String issueTypeName,
-            String summary,
-            String description,
-            String assignee,
-            String affectsVersions,
-            String fixVersions,
-            Map<String, Object> customFields)
-    {
+    public BasicIssue createIssue(JiraConnection connection, String projectKey,
+            String issueTypeName, String summary, String description, String assignee,
+            String affectsVersions, String fixVersions, Map<String, Object> customFields) {
         try {
             try (JiraRestClient restClient = clientFactory.create(connection)) {
                 CimProject cimProject = getCreateIssueMetadata(restClient, projectKey);
-                CimIssueType issueType = EntityHelper.findEntityByName(cimProject.getIssueTypes(), issueTypeName);
+                CimIssueType issueType = EntityHelper.findEntityByName(cimProject.getIssueTypes(),
+                        issueTypeName);
 
-                IssueInputBuilder issueBuilder = new IssueInputBuilder(cimProject, issueType, summary);
+                IssueInputBuilder issueBuilder = new IssueInputBuilder(cimProject, issueType,
+                        summary);
                 issueBuilder.setDescription(description);
 
                 setAssignee(restClient, issueBuilder, connection, assignee);
@@ -76,14 +82,17 @@ public class JiraService {
         }
     }
 
-    private void setCustomFields(IssueInputBuilder issueBuilder, CimIssueType issueType, Map<String, Object> customFields) {
+    private void setCustomFields(IssueInputBuilder issueBuilder, CimIssueType issueType,
+            Map<String, Object> customFields) {
         for (Map.Entry<String, Object> customField : customFields.entrySet()) {
             Object value = customField.getValue();
-            setCustomField(issueBuilder, issueType, customField.getKey(), Objects.toString(value, null));
+            setCustomField(issueBuilder, issueType, customField.getKey(),
+                    Objects.toString(value, null));
         }
     }
 
-    private void setAffectsVersions(IssueInputBuilder issueBuilder, CimIssueType issueType, String affectsVersions) {
+    private void setAffectsVersions(IssueInputBuilder issueBuilder, CimIssueType issueType,
+            String affectsVersions) {
         if (Strings.isNullOrEmpty(affectsVersions)) {
             return;
         }
@@ -96,7 +105,8 @@ public class JiraService {
         }
     }
 
-    private void setFixVersions(IssueInputBuilder issueBuilder, CimIssueType issueType, String fixVersions) {
+    private void setFixVersions(IssueInputBuilder issueBuilder, CimIssueType issueType,
+            String fixVersions) {
         if (Strings.isNullOrEmpty(fixVersions)) {
             return;
         }
@@ -140,10 +150,12 @@ public class JiraService {
         return null;
     }
 
-    private void setCustomField(IssueInputBuilder issueBuilder, CimIssueType issueType, String fieldName, String fieldValue) {
+    private void setCustomField(IssueInputBuilder issueBuilder, CimIssueType issueType,
+            String fieldName, String fieldValue) {
         CimFieldInfo cimFieldInfo = getCustomField(issueType, fieldName);
         if (cimFieldInfo != null) {
-            List<CustomFieldOption> allowedValues = castToList(cimFieldInfo.getAllowedValues(), CustomFieldOption.class);
+            List<CustomFieldOption> allowedValues = castToList(cimFieldInfo.getAllowedValues(),
+                    CustomFieldOption.class);
             if (Strings.isNullOrEmpty(fieldValue)) {
                 CustomFieldOption firstOption = allowedValues.get(0);
                 issueBuilder.setFieldValue(cimFieldInfo.getId(), firstOption.getValue());
@@ -154,11 +166,13 @@ public class JiraService {
                         List<String> fieldValues = parseListOfStrings(fieldValue);
                         fieldOptions = new ArrayList<>(fieldValues.size());
                         for (String oneFieldValue : fieldValues) {
-                            CustomFieldOption fieldOption = findFieldOptionOrFail(cimFieldInfo, oneFieldValue);
+                            CustomFieldOption fieldOption = findFieldOptionOrFail(cimFieldInfo,
+                                    oneFieldValue);
                             fieldOptions.add(fieldOption);
                         }
                     } else {
-                        CustomFieldOption fieldOption = findFieldOptionOrFail(cimFieldInfo, fieldValue);
+                        CustomFieldOption fieldOption = findFieldOptionOrFail(cimFieldInfo,
+                                fieldValue);
                         fieldOptions = Collections.singletonList(fieldOption);
                     }
                     issueBuilder.setFieldValue(cimFieldInfo.getId(), fieldOptions);
@@ -177,8 +191,8 @@ public class JiraService {
     private static CustomFieldOption findFieldOptionOrFail(CimFieldInfo fieldInfo, String value) {
         CustomFieldOption fieldOption = findFieldOption(fieldInfo, value);
         if (fieldOption == null) {
-            throw new BadRequestException(
-                 "Value '" + value + "' is not allowed for field " + fieldInfo.getId() + " / " + fieldInfo.getName());
+            throw new BadRequestException("Value '" + value + "' is not allowed for field "
+                    + fieldInfo.getId() + " / " + fieldInfo.getName());
         }
         return fieldOption;
     }
@@ -195,7 +209,7 @@ public class JiraService {
 
     @SuppressWarnings("unchecked")
     private static <T> List<T> castToList(Iterable rawOptions, Class<T> entityType) {
-        return (List<T>) Lists.newArrayList(rawOptions);
+        return Lists.newArrayList(rawOptions);
     }
 
     private static CimFieldInfo getCustomField(CimIssueType issueType, String name) {
@@ -207,7 +221,8 @@ public class JiraService {
         return null;
     }
 
-    private void setAssignee(JiraRestClient restClient, IssueInputBuilder issueBuilder, JiraConnection connection, String assignee) {
+    private void setAssignee(JiraRestClient restClient, IssueInputBuilder issueBuilder,
+            JiraConnection connection, String assignee) {
         String username = defaultIfEmpty(assignee, connection.login);
         BasicUser user = getUser(restClient, username);
         issueBuilder.setAssignee(user);
@@ -222,13 +237,8 @@ public class JiraService {
     }
 
     private CimProject getCreateIssueMetadata(JiraRestClient restClient, String projectKey) {
-        Iterable<CimProject> cimProjects =
-            restClient.getIssueClient().getCreateIssueMetadata(
-                new GetCreateIssueMetadataOptionsBuilder()
-                    .withProjectKeys(projectKey)
-                    .withExpandedIssueTypesFields()
-                    .build()
-            ).claim();
+        Iterable<CimProject> cimProjects = restClient.getIssueClient().getCreateIssueMetadata(
+                new GetCreateIssueMetadataOptionsBuilder().withProjectKeys(projectKey).withExpandedIssueTypesFields().build()).claim();
         Iterator<CimProject> cimProjectIterator = cimProjects.iterator();
         if (cimProjectIterator.hasNext()) {
             return cimProjectIterator.next();

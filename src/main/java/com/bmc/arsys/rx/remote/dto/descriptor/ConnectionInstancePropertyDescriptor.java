@@ -7,5 +7,4 @@ public class ConnectionInstancePropertyDescriptor {
     public String helpText;
     public ConnectionInstancePropertyType type;
     public boolean required;
-
 }

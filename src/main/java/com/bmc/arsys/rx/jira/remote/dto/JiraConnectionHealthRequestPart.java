@@ -9,7 +9,6 @@ public class JiraConnectionHealthRequestPart {
     public String id;
     public JiraConnection properties;
 
-
     public ConnectionHealth performOn(JiraService service) {
         return service.checkHealth(id, properties);
     }
