@@ -1,6 +1,6 @@
 ##  Create 'Remote Servers'  Setting Definition
 
-...
+```
 POST /api/rx/application/admin-settings/component HTTP/1.1
 Content-Type: application/json
 
@@ -71,11 +71,11 @@ Content-Type: application/json
 		"fieldOrder": 5
 	}]
 }
-...
+```
 
 ##  Register remote server
 
-...
+```
 POST /api/rx/application/remoteserver HTTP/1.1
 Content-Type: application/json
 
@@ -85,13 +85,13 @@ Content-Type: application/json
   "baseUrl": "http://localhost:8000/",
   "path": "remoteserver/remoteserverdescriptor"
 }
-...
+```
 
 ##  Test Remote server descriptor
 
-...
+```
 GET /remoteserver/remoteserverdescriptor HTTP/1.1
 Host: 127.0.0.1:8000
 Content-Type: application/json
 
-...
+```
