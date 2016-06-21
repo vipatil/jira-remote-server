@@ -99,3 +99,40 @@ GET http://95bt-delhi.bmc.com:8000/remoteserver/remoteserverdescriptor
 Content-Type: application/json
 
 ```
+
+## Create Jira connection instance in Admin Setting 
+
+```
+Go to Administrator  -->  Connectors ---> com.bmc.arsys.rx.jira
+
+Click on plus sign
+
+Fill in fields with below values 
+
+	connectionInstanceId: jira,
+	url: https://partnerpedia.atlassian.net,
+	login: dsmconnect",
+	password: RSFRocks!
+	
+```
+
+## Get Status of Running process 
+
+First get the list of all running instances of given process name 
+Here process name is 'com.example.work-order-lib:Basic Work Order Fulfillment'
+
+```
+GET http://95bt-delhi.bmc.com:8008/api/rx/application/datapage/?dataPageType=com.bmc.arsys.rx.application.process.datapage.ProcessInstanceDataPageQuery&pageSize=-1&startIndex=0&processDefinitionName=com.example.work-order-lib:Basic%20Work%20Order%20Fulfillment
+Content-Type: application/json
+
+``` 
+
+## Get status of one running instance with given instanceId
+
+In below instance of process is identified by GUID, 'IDGAA5V0FO0Y8AOJDU46OJDU468S23'
+
+```
+GET http://95bt-delhi.bmc.com:8008/api/rx/application/process/processinstance/com.example.work-order-lib:Basic%20Work%20Order%20Fulfillment/IDGAA5V0FO0Y8AOJDU46OJDU468S23
+Content-Type: application/json
+
+```
