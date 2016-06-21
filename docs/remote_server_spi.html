@@ -1,0 +1,251 @@
+<!DOCTYPE HTML><html><head><title>Rx Remote Server SPI API documentation</title><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="generator" content="https://github.com/kevinrenskers/raml2html 2.1.0"><link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/styles/default.min.css"><script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script><script type="text/javascript" src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/highlight.min.js"></script><script type="text/javascript">
+      $(document).ready(function() {
+        $('.page-header pre code, .top-resource-description pre code').each(function(i, block) {
+          hljs.highlightBlock(block);
+        });
+
+        $('[data-toggle]').click(function() {
+          var selector = $(this).data('target') + ' pre code';
+          $(selector).each(function(i, block) {
+            hljs.highlightBlock(block);
+          });
+        });
+
+        // open modal on hashes like #_action_get
+        $(window).bind('hashchange', function(e) {
+          var anchor_id = document.location.hash.substr(1); //strip #
+          var element = $('#' + anchor_id);
+
+          // do we have such element + is it a modal?  --> show it
+          if (element.length && element.hasClass('modal')) {
+            element.modal('show');
+          }
+        });
+
+        // execute hashchange on first page load
+        $(window).trigger('hashchange');
+
+        // remove url fragment on modal hide
+        $('.modal').on('hidden.bs.modal', function() {
+          if(history && history.replaceState) {
+            history.replaceState({}, '', '#');
+          }
+        });
+      });
+    </script><style>
+      .hljs {
+        background: transparent;
+      }
+      .parent {
+        color: #999;
+      }
+      .list-group-item > .badge {
+        float: none;
+        margin-right: 6px;
+      }
+      .panel-title > .methods {
+        float: right;
+      }
+      .badge {
+        border-radius: 0;
+        text-transform: uppercase;
+        width: 70px;
+        font-weight: normal;
+        color: #f3f3f6;
+        line-height: normal;
+      }
+      .badge_get {
+        background-color: #63a8e2;
+      }
+      .badge_post {
+        background-color: #6cbd7d;
+      }
+      .badge_put {
+        background-color: #22bac4;
+      }
+      .badge_delete {
+        background-color: #d26460;
+      }
+      .badge_patch {
+        background-color: #ccc444;
+      }
+      .list-group, .panel-group {
+        margin-bottom: 0;
+      }
+      .panel-group .panel+.panel-white {
+        margin-top: 0;
+      }
+      .panel-group .panel-white {
+        border-bottom: 1px solid #F5F5F5;
+        border-radius: 0;
+      }
+      .panel-white:last-child {
+        border-bottom-color: white;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+      }
+      .panel-white .panel-heading {
+        background: white;
+      }
+      .tab-pane ul {
+        padding-left: 2em;
+      }
+      .tab-pane h2 {
+        font-size: 1.2em;
+        padding-bottom: 4px;
+        border-bottom: 1px solid #ddd;
+      }
+      .tab-pane h3 {
+        font-size: 1.1em;
+      }
+      .tab-content {
+        border-left: 1px solid #ddd;
+        border-right: 1px solid #ddd;
+        border-bottom: 1px solid #ddd;
+        padding: 10px;
+      }
+      #sidebar {
+        margin-top: 30px;
+        padding-right: 5px;
+        overflow: auto;
+        height: 90%;
+      }
+      .top-resource-description {
+        border-bottom: 1px solid #ddd;
+        background: #fcfcfc;
+        padding: 15px 15px 0 15px;
+        margin: -15px -15px 10px -15px;
+      }
+      .resource-description {
+        border-bottom: 1px solid #fcfcfc;
+        background: #fcfcfc;
+        padding: 15px 15px 0 15px;
+        margin: -15px -15px 10px -15px;
+      }
+      .resource-description p:last-child {
+        margin: 0;
+      }
+      .list-group .badge {
+        float: left;
+      }
+      .method_description {
+        margin-left: 85px;
+      }
+      .method_description p:last-child {
+        margin: 0;
+      }
+      .list-group-item {
+        cursor: pointer;
+      }
+      .list-group-item:hover {
+        background-color: #f5f5f5;
+      }
+    </style></head><body data-spy="scroll" data-target="#sidebar"><div class="container"><div class="row"><div class="col-md-9" role="main"><div class="page-header"><h1>Rx Remote Server SPI API documentation</h1><p></p><h3 id="Principles"><a href="#Principles">Principles</a></h3><p>This document describes the <a href="https://en.wikipedia.org/wiki/Service_provider_interface">SPI</a>, which Rx remote server/connectors need to implement.</p><p>A remote server exposes an SPI (i.e. an API consumed by AR). The SPI includes:</p><ul><li>descriptors i.e. metadata about the remote server and its contents</li><li>remote connectors and their actions</li></ul><p>Remote connector actions are elementary pieces of functionality that can be used as bricks in AR processes.</p><h3 id="typical-interaction-involving-a-remote-connector">Typical Interaction involving a Remote Connector</h3><p><img src="typical_sequence.png" alt="a typical interaction" width="100%"></p><h3 id="https-and-http">HTTPS and HTTP</h3><p>A remote server either works entirely on HTTP or HTTPS. Production deployments should use HTTPS. HTTP is supported for development purpose.</p><p>Self-signed SSL certificates are not supported yet.</p><h3 id="literal-types-and-formats">Literal Types and Formats</h3><p>Unless stated otherwise, the remote server API uses JSON to transfer data.</p><h3 id="authentication">Authentication</h3><p>A remote server may use <a href="https://en.wikipedia.org/wiki/Basic_access_authentication">HTTP basic authentication</a> to protect all of its end-points. When used:</p><ul><li>Every call from the platform will contain the <code>Authorization</code> HTTP header. The remote server should not expect the platform to trade the authorization challenge against a cookie or a token.</li><li>The remote server descriptor should be protected by the same authentication.</li></ul><p>HTTPS would normally be used concomitantly with basic auth in order to provide reasonable security.</p><h3 id="error-handling">Error Handling</h3><p>As much as possible, a remote server should attempt at following HTTP conventions when it comes to HTTP status codes. If a status code has a special meaning for the platform, it will be stated in the specification of the corresponding end-point.</p><p>A remote server should return error details as a JSON payload with the following format:</p><pre><code class="lang-json">    {
+      "messageType": "ERROR",
+      "messageText": "cost should be greater than price",
+      "moreInfo": "..." // e.g. stack trace
+    }
+</code></pre><h3 id="Remote-Server-Descriptor"><a href="#Remote-Server-Descriptor">Remote Server Descriptor</a></h3><p>Remote server descriptors describe the connectors and connection actions exposed by a remote server.</p><p>Example:</p><pre><code class="lang-json">      {
+        "connectors": [
+          {
+            "name": "BMC Atrium Orchestrator", // for display
+            "type": "com.bmc.bao", // unique among all connectors
+            "path": "bao", // URI path relative to remote server root
+            "connectionInstanceProperties": [ ... ],
+            "actions": [
+              {
+                "name": "submitRequest", // immutable key of the action
+                "displayName": "Submit Request",
+                "path": "submitrequest", // URI path relative to connector path
+                "inputs": [ ... ],
+                "output": { ... }
+              },
+              ...
+            ]
+          }
+        ]
+      }
+</code></pre><h3 id="connector-and-action-names">Connector and Action Names</h3><p>A remote connector is identified by its "type" attribute across all connectors known to an AR server, whether it is in-app or deployed on any remote server. We suggest to follow a reverse domain name notation in order to avoid conflicts.</p><p>Example:</p><pre><code>com.example.myconnector
+</code></pre><p>Action names are unique per connector.</p><h3 id="connection-instance-properties">Connection Instance Properties</h3><p>Example:</p><pre><code class="lang-json">    {
+      "name": "host",
+      "displayName": "Server Host",
+      "helpText": "server name or IP address",
+      "type": "String",
+      "required": true,
+      "defaultValue": null
+    },
+    {
+      "name": "port",
+      "displayName": "Server Port",
+      "type": "Integer",
+      "required": false,
+      "defaultValue": 8080
+    },
+    {
+      "name": "login",
+      "type": "String",
+      "required": true
+    },
+    {
+      "name": "password",
+      "type": "EncryptedString",
+      "required": false
+    }
+</code></pre><p>Supported property types: String, Integer, EncryptedString. EncryptedString values are still passed to the connector as plain text, but are stored encrypted in AR.</p><h3 id="action-input-descriptors">Action Input Descriptors</h3><p>Example:</p><pre><code class="lang-json">    {
+      "name": "action name",
+      "path": "com.example.myconnector",
+      "inputs": [
+        { "name": "itemId", "type": "String", "required": "true" },
+        { "name": "quantity", "type": "Integer", "required": "false" }
+      ]
+    }
+</code></pre><h3 id="action-output-descriptor">Action Output Descriptor</h3><p>Example:</p><pre><code class="lang-json">    {
+      "name": "action name",
+      "path": "com.example.myconnector",
+      "inputs": [ ... ],
+      "output": { "type": "String" }
+    }
+</code></pre><h3 id="input-output-types">Input/Output Types</h3><table class="table"><thead><tr><th>input/output type</th><th>JSON transfer type and value examples</th></tr></thead><tbody><tr><td>any</td><td>null value:<br><code>null</code></td></tr><tr><td>String</td><td>string<br><code>"a value"</code></td></tr><tr><td>Integer</td><td>integer<br><code>123</code></td></tr></tbody></table></div><div class="panel panel-default"><div class="panel-heading"><h3 id="remoteserver" class="panel-title">Remote Server</h3></div><div class="panel-body"><div class="panel-group"><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_remoteserver_remoteserverdescriptor"><span class="parent">/remoteserver</span>/remoteserverdescriptor</a> <span class="methods"><a href="#remoteserver_remoteserverdescriptor_get"><span class="badge badge_get">get</span></a></span></h4></div><div id="panel_remoteserver_remoteserverdescriptor" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#remoteserver_remoteserverdescriptor_get'" class="list-group-item"><span class="badge badge_get">get</span><div class="method_description"><p>Returns the remote server descriptor.</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="remoteserver_remoteserverdescriptor_get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get</span> <span class="parent">/remoteserver</span>/remoteserverdescriptor</h4></div><div class="modal-body"><div class="alert alert-info"><p>Returns the remote server descriptor.</p></div><ul class="nav nav-tabs"><li><a href="#remoteserver_remoteserverdescriptor_get_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane" id="remoteserver_remoteserverdescriptor_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
+  "connectors": [
+    {
+      "name": "BMC Atrium Orchestrator", // for display
+      "type": "com.bmc.bao", // unique among all connectors
+      "path": "bao", // URI path relative to remote server root
+      "connectionInstanceProperties": [ ... ],
+      "actions": [
+        {
+          "name": "submitRequest", // immutable key of the action
+          "displayName": "Submit Request",
+          "path": "submitrequest", // URI path relative to connector path
+          "inputs": [ ... ],
+          "output": { ... }
+        },
+        ...
+      ]
+    }
+  ]
+}
+</code></pre></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="path_to_connector" class="panel-title">Connector</h3></div><div class="panel-body"><div class="panel-group"><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_path_to_connector_anAction"><span class="parent">/path/to/connector</span>/anAction</a> <span class="methods"><a href="#path_to_connector_anAction_post"><span class="badge badge_post">post</span></a></span></h4></div><div id="panel_path_to_connector_anAction" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#path_to_connector_anAction_post'" class="list-group-item"><span class="badge badge_post">post</span><div class="method_description"><p>Executes the <code>anAction</code> action. The URL is:</p><p><code>remote server URI</code> + <code>connector path</code> + <code>action path</code></p><p>All action end-points implement the same API pattern. They just have different paths.</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="path_to_connector_anAction_post"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_post">post</span> <span class="parent">/path/to/connector</span>/anAction</h4></div><div class="modal-body"><div class="alert alert-info"><p>Executes the <code>anAction</code> action. The URL is:</p><p><code>remote server URI</code> + <code>connector path</code> + <code>action path</code></p><p>All action end-points implement the same API pattern. They just have different paths.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#path_to_connector_anAction_post_request" data-toggle="tab">Request</a></li><li><a href="#path_to_connector_anAction_post_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="path_to_connector_anAction_post_request"><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
+  "connectionInstanceId": {
+    "host": "my.server.com",
+    "port": 8080,
+    "login": "admin",
+    "password": "DghbW4QQ0"
+  },
+  "inputs": {
+    "user": "Bob",
+    "quantity": 1,
+    "productId": "93820"
+  }
+}
+</code></pre></div><div class="tab-pane" id="path_to_connector_anAction_post_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
+  "outputs": {
+    "orderId": "987656500",
+    "ETA": "2099-12-25T00:00:00",
+    "shippingAddress": {
+      "state": "CA",
+      "city": "Santa Clara"
+    }
+  }
+}
+</code></pre></div></div></div></div></div></div></div></div></div></div></div><div class="col-md-3"><div id="sidebar" class="hidden-print affix" role="complementary"><ul class="nav nav-pills nav-stacked"><li><a href="#remoteserver">Remote Server</a></li><li><a href="#path_to_connector">Connector</a></li></ul></div></div></div></div></body></html>
