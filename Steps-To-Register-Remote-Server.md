@@ -1,6 +1,6 @@
 ##  Create 'Remote Servers'  Setting Definition
 
-Before building process with remote actions in Beta build we need to create Setting Definition to sore information about remote servers.
+Before building process with remote actions in Beta build we need to create Setting Definition to store information about remote servers.
 This definition is created with below POSt request.
 
 
