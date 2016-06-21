@@ -1,4 +1,12 @@
-## login 
+Rest of steps need POSTMAN client, Lets start POSTMAN (Chrome app), REST API client
+```
+ Open chrome web client and key in 
+ chrome://apps
+ look for Postman
+ 
+```  
+
+## Login to ARSystem 
 
 ```
 POST http://localhost:8008/api/rx/application/command
@@ -17,7 +25,7 @@ body
 ##  Create 'Remote Servers'  Setting Definition
 
 Before building process with remote actions in Beta build we need to create Setting Definition to store information about remote servers.
-This definition is created with below POSt request.
+This definition is created with below POST request.
 
 
 ```
@@ -96,6 +104,14 @@ body
 }
 ```
 
+##  Test Remote server descriptor
+Below API is invoked to get descriptor from remote server and to check if if it is valid.
+
+```
+GET http://95bt-delhi.bmc.com:8000/remoteserver/remoteserverdescriptor
+
+```
+
 ##  Register remote server
 To Register Remote Server with AR Server use below POST API for Beta.
 
@@ -114,14 +130,6 @@ body
 }
 ```
 
-##  Test Remote server descriptor
-Below API is invoked to get descriptor from remote server and to check if if it is valid.
-
-```
-GET http://95bt-delhi.bmc.com:8000/remoteserver/remoteserverdescriptor
-
-```
-
 ## Create Jira connection instance in Admin Setting 
 
 ```
@@ -131,10 +139,10 @@ Click on plus sign
 
 Fill in fields with below values 
 
-	connectionInstanceId: jira,
-	url: https://partnerpedia.atlassian.net,
-	login: dsmconnect",
-	password: RSFRocks!
+	connectionInstanceId: jira
+	url: https://partnerpedia.atlassian.net
+	login: dsmconnect
+	password: RSFRocks!	
 	
 ```
 
