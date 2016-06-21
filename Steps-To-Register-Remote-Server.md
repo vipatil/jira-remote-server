@@ -1,7 +1,11 @@
 ##  Create 'Remote Servers'  Setting Definition
 
+Before building process with remote actions in Beta build we need to create Setting Definition to sore information about remote servers.
+This definition is created with below POSt request.
+
+
 ```
-POST http://95bt-delhi.bmc.com:8008/api/rx/application/admin-settings/component HTTP/1.1
+POST http://95bt-delhi.bmc.com:8008/api/rx/application/admin-settings/component
 Content-Type: application/json
 
 {
@@ -74,24 +78,24 @@ Content-Type: application/json
 ```
 
 ##  Register remote server
+To Register Remote Server with AR Server use below POST API for Beta.
 
 ```
-POST http://95bt-delhi.bmc.com:8008/api/rx/application/remoteserver HTTP/1.1
+POST http://95bt-delhi.bmc.com:8008/api/rx/application/remoteserver
 Content-Type: application/json
 
 {
   "username": "Allen",
   "password": "password",
-  "baseUrl": "http://localhost:8000/",
+  "baseUrl": "http://95bt-delhi.bmc.com:8000/",
   "path": "remoteserver/remoteserverdescriptor"
 }
 ```
 
 ##  Test Remote server descriptor
-
+Below API is invoked to get descriptor from remote server and to check if if it is valid.
 ```
-GET http://95bt-delhi.bmc.com:8008/remoteserver/remoteserverdescriptor HTTP/1.1
-Host: 127.0.0.1:8000
+GET http://95bt-delhi.bmc.com:8000/remoteserver/remoteserverdescriptor
 Content-Type: application/json
 
 ```
