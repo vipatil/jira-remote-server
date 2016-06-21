@@ -1,13 +1,18 @@
 ## login 
 
-POST http://95bt-delhi.bmc.com:8008/api/rx/application/command
+```
+POST http://localhost:8008/api/rx/application/command
+
 Content-Type: application/json
+
+body
 
 {
   "username": "Seth",
   "password": "Seth",
   "resourceType": "com.bmc.arsys.rx.application.user.command.LoginCommand"
 }
+````
 
 ##  Create 'Remote Servers'  Setting Definition
 
@@ -16,8 +21,11 @@ This definition is created with below POSt request.
 
 
 ```
-POST http://95bt-delhi.bmc.com:8008/api/rx/application/admin-settings/component
+POST http://localhost:8008/api/rx/application/admin-settings/component
+
 Content-Type: application/json
+
+body
 
 {
 	"componentName": "Remote Servers",
@@ -92,8 +100,11 @@ Content-Type: application/json
 To Register Remote Server with AR Server use below POST API for Beta.
 
 ```
-POST http://95bt-delhi.bmc.com:8008/api/rx/application/remoteserver
+POST http://localhost:8008/api/rx/application/remoteserver
+
 Content-Type: application/json
+
+body
 
 {
   "username": "Allen",
@@ -105,9 +116,9 @@ Content-Type: application/json
 
 ##  Test Remote server descriptor
 Below API is invoked to get descriptor from remote server and to check if if it is valid.
+
 ```
 GET http://95bt-delhi.bmc.com:8000/remoteserver/remoteserverdescriptor
-Content-Type: application/json
 
 ```
 
@@ -127,13 +138,17 @@ Fill in fields with below values
 	
 ```
 
+## Modify Work Order flow to add JIRA connector
+
+## Raise a work order to start process/workflow
+
 ## Get Status of Running process 
 
 First get the list of all running instances of given process name 
 Here process name is 'com.example.work-order-lib:Basic Work Order Fulfillment'
 
 ```
-GET http://95bt-delhi.bmc.com:8008/api/rx/application/datapage/?dataPageType=com.bmc.arsys.rx.application.process.datapage.ProcessInstanceDataPageQuery&pageSize=-1&startIndex=0&processDefinitionName=com.example.work-order-lib:Basic%20Work%20Order%20Fulfillment
+GET http://localhost:8008/api/rx/application/datapage/?dataPageType=com.bmc.arsys.rx.application.process.datapage.ProcessInstanceDataPageQuery&pageSize=-1&startIndex=0&processDefinitionName=com.example.work-order-lib:Basic%20Work%20Order%20Fulfillment
 Content-Type: application/json
 
 ``` 
@@ -143,7 +158,7 @@ Content-Type: application/json
 In below instance of process is identified by GUID, 'IDGAA5V0FO0Y8AOJDU46OJDU468S23'
 
 ```
-GET http://95bt-delhi.bmc.com:8008/api/rx/application/process/processinstance/com.example.work-order-lib:Basic%20Work%20Order%20Fulfillment/IDGAA5V0FO0Y8AOJDU46OJDU468S23
+GET http://localhost:8008/api/rx/application/process/processinstance/com.example.work-order-lib:Basic%20Work%20Order%20Fulfillment/IDGAA5V0FO0Y8AOJDU46OJDU468S23
 Content-Type: application/json
 
 ```
