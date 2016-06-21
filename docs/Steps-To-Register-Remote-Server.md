@@ -1,3 +1,14 @@
+## login 
+
+POST http://95bt-delhi.bmc.com:8008/api/rx/application/command
+Content-Type: application/json
+
+{
+  "username": "Seth",
+  "password": "Seth",
+  "resourceType": "com.bmc.arsys.rx.application.user.command.LoginCommand"
+}
+
 ##  Create 'Remote Servers'  Setting Definition
 
 Before building process with remote actions in Beta build we need to create Setting Definition to store information about remote servers.
