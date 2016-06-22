@@ -1,6 +1,11 @@
-# Build New Maven project 
+#### Build New Maven project in Eclipse 
 
-# Update pom.xml to add depenedences 
+```
+New -> Project -> Maven project
+```
+ 
+
+#### Update pom.xml to add depenedences 
 ```
  <properties>  
          <jetty.version>9.3.9.v20160517</jetty.version>  
@@ -79,10 +84,9 @@
 </dependencies> 
 
 ```
-# Add a package for classes for Main, from parsing command line options, REST server and for top level resource
+#### Add a package for classes for Main, from parsing command line options, REST server and for top level resource
 
 ```
-
 com.example.remote.remote
 Main, CliOptions, ServerRunner
  
@@ -94,7 +98,7 @@ ErrorResponse
 
 ```
 
-# Run REST Server within Eclipse by right clicking on Main class and test top level rest resource with the POSTMAN
+#### Run REST Server within Eclipse by right clicking on Main class and test top level rest resource with the POSTMAN
 
 ```
 
@@ -103,7 +107,7 @@ GET http://127.0.0.1:8000/
 ```
 
 
-# Implement DTO, These represent Remote connector SPI
+#### Implement DTO, These represent Remote connector SPI
 
 ```
 com.example.remote.remote.dto.descriptor
@@ -119,13 +123,12 @@ RemoteServerDescriptor
 
 ```
 
-# Implement REST API
+#### Implement REST API
 
 ```
 com.example.remote.remote.rest
 
 RemoteServerResource
-
 
 
 @Path("remoteserver")  
@@ -147,13 +150,10 @@ public class RemoteServerResource {
         return "OK";  
     }  
 }
-
-
 ```
 Then Register above endpoint with the Rest server by adding its entry in RestApplication.getClasses() method as shown below at line# 10
 
 ```
-
 @ApplicationPath("/")  
 public class RestApplication extends javax.ws.rs.core.Application {  
   
@@ -170,14 +170,14 @@ public class RestApplication extends javax.ws.rs.core.Application {
 
 ```
 
-# Test above code with POSTMAN by using below API
+#### Test above code with POSTMAN by using below API
 
 ```
 GET http://localhost:8000/remoteserver/remoteserverdescriptor
 
 ```
 
-# Implement Jira Specific Stuff
+#### Implement Jira Specific Stuff
 
 Update pom.xml file to add dependency on JIRA repository
 
