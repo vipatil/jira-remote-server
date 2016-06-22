@@ -133,6 +133,8 @@ body
 ## Create Jira connection instance in Admin Setting 
 
 ```
+Open innovation-studio application ,  http://localhost:8008/innovation-studio/index.html
+Login as Seth/Seth
 Go to Administrator  -->  Connectors ---> com.bmc.arsys.rx.jira
 
 Click on plus sign
