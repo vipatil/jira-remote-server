@@ -3,10 +3,9 @@
 ```
 New -> Project -> Maven project
 ```
- 
 
-#### Update pom.xml to add depenedences 
-```
+#### Update pom.xml to add dependencies 
+```xml
  <properties>  
          <jetty.version>9.3.9.v20160517</jetty.version>  
          <jackson.version>2.7.4</jackson.version>  
@@ -86,7 +85,7 @@ New -> Project -> Maven project
 ```
 #### Add a package for classes for Main, from parsing command line options, REST server and for top level resource
 
-```
+```java
 com.example.remote.remote
 Main, CliOptions, ServerRunner
  
@@ -101,15 +100,13 @@ ErrorResponse
 #### Run REST Server within Eclipse by right clicking on Main class and test top level rest resource with the POSTMAN
 
 ```
-
 GET http://127.0.0.1:8000/
-
 ```
 
 
 #### Implement DTO, These represent Remote connector SPI
 
-```
+```java
 com.example.remote.remote.dto.descriptor
 
 ActionDescriptor,
@@ -120,12 +117,11 @@ ConnectorDescriptor
 InputDescriptor
 InputOutputType
 RemoteServerDescriptor
-
 ```
 
 #### Implement REST API
 
-```
+```java
 com.example.remote.remote.rest
 
 RemoteServerResource
@@ -153,7 +149,7 @@ public class RemoteServerResource {
 ```
 Then Register above endpoint with the Rest server by adding its entry in RestApplication.getClasses() method as shown below at line# 10
 
-```
+```java
 @ApplicationPath("/")  
 public class RestApplication extends javax.ws.rs.core.Application {  
   
@@ -174,7 +170,6 @@ public class RestApplication extends javax.ws.rs.core.Application {
 
 ```
 GET http://localhost:8000/remoteserver/remoteserverdescriptor
-
 ```
 
 #### Implement Jira Specific Stuff
@@ -182,8 +177,7 @@ GET http://localhost:8000/remoteserver/remoteserverdescriptor
 Update pom.xml file to add dependency on JIRA repository
 
 
-```
-
+```xml
 <repositories>  
    <repository>  
       <id>atlassian.com</id>  
@@ -191,13 +185,11 @@ Update pom.xml file to add dependency on JIRA repository
       <url>https://m2proxy.atlassian.com/repository/public</url>  
    </repository>  
 </repositories>
-
-
 ```
 
 Add dependency on JIRA client api library
 
-```
+```xml
 <dependency>  
    <groupId>com.atlassian.jira</groupId>  
    <artifactId>jira-rest-java-client-core</artifactId>  
@@ -207,7 +199,7 @@ Add dependency on JIRA client api library
 
 Add below  packages and classes 
 
-```
+```java
 com.example.remote.jira.remote.dto
  
 ActionRequest
@@ -242,7 +234,7 @@ SettableFuturePromiseHttpPromiseAsyncClient
  
 Register JiraResource endpoint with the Rest server by adding its entry in RestApplication.getClasses() method as shown below at line# 11
 
-```
+```java
 @ApplicationPath("/")  
   public class RestApplication extends javax.ws.rs.core.Application {  
     
@@ -256,14 +248,13 @@ Register JiraResource endpoint with the Rest server by adding its entry in RestA
          classes.add(JiraResource.class);  
          return classes;  
      }  
-}  
-
+}
 ```
 
 
 Update RemoteServerResource.java class to add JIRA connector action as shown below
 
-```
+```java
 private static final RemoteServerDescriptor DESCRIPTOR =  
      new RemoteServerDescriptor() {{  
          connectors.add(  
@@ -354,7 +345,7 @@ private static final RemoteServerDescriptor DESCRIPTOR =
 
 Update imports to reflect above changes
 
-```
+```java
 import com.example.remote.jira.remote.rest.JiraResource;  
 import com.example.remote.remote.dto.descriptor.ActionDescriptor;  
 import com.example.remote.remote.dto.descriptor.ConnectionInstancePropertyDescriptor;  
